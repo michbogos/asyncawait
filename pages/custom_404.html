@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../libs/matter.min.js"></script>
+    <script src="../libs/poly-decomp.min.js"></script>
+    <script src="../libs/pathseg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&display=swap" rel="stylesheet">
+    <title>404 Page not found</title>
+</head>
+<body>
+    <a href="../index.html">Go Back</a>
+</body>
+</html>
+<style>
+    body{
+        margin:0;
+        padding:0;
+        width:100vw;
+        height:100vh;
+        overflow: hidden;
+    }
+    canvas{
+        margin:0;
+        padding:0;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    a{
+        background:#00000000;
+        position:absolute;
+        z-index: 1;
+        margin:1em;
+        font-family: 'Archivo', sans-serif;
+        color: #ececd1;
+        font-size: xx-large;
+    }
+</style>
+<script>
+    var Engine = Matter.Engine,
+    Common = Matter.Common,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Body = Matter.Body,
+    Svg = Matter.Svg,
+    Vertices = Matter.Vertices,
+    MouseConstraint = Matter.MouseConstraint;
+    Mouse = Matter.Mouse,
+    Constraint = Matter.Constraint,
+    Composite = Matter.Composite;
+
+    var mouse = Mouse.create(document.querySelector("canvas"));
+
+    // create an engine
+    var engine = Engine.create();
+
+    var mConstraint = MouseConstraint.create(engine, {mouse:mouse});
+
+    // create a renderer
+    var render = Render.create({
+        element: document.body,
+        engine: engine,
+        options:{
+            width:document.body.clientWidth,
+            height:document.body.clientHeight,
+            wireframes: false,
+        }
+    });
+
+    // create two boxes and a ground
+    var circle = Bodies.circle(45, 80, 80);
+    var circleConstraint = Constraint.create({bodyA:circle, pointB:{x:document.body.clientWidth/3 + document.body.clientWidth/4*0.5, y:0}, length:document.body.clientHeight/2, damping:0.01, stiffness:0.02})
+
+    var ground = Bodies.rectangle(document.body.clientWidth/2, document.body.clientHeight, document.body.clientWidth, document.body.clientHeight*0.1, { isStatic: true });
+
+    // add all of the bodies to the world
+    if (typeof fetch !== 'undefined') {
+        var select = function(root, selector) {
+            return Array.prototype.slice.call(root.querySelectorAll(selector));
+        };
+
+        var loadSvg = function(url) {
+            return fetch(url)
+                .then(function(response) { return response.text(); })
+                .then(function(raw) { return (new window.DOMParser()).parseFromString(raw, 'image/svg+xml'); });
+        };
+
+        ([
+            '../assets/4.svg', 
+            '../assets/4.svg',
+        ]).forEach(function(path, i) { 
+            loadSvg(path).then(function(root) {
+                var color = Common.choose(['#f19648', '#f5d259', '#f55a3c', '#063e7b', '#ececd1']);
+
+                var vertexSets = select(root, 'path')
+                    .map(function(path) { return Vertices.scale(Svg.pathToVertices(path, 20), 1, 1); });
+                
+                let body = Bodies.fromVertices(100 + i * 150, 200 + i * 50, vertexSets, {
+                    render: {
+                        fillStyle: color,
+                        strokeStyle: color,
+                        lineWidth: 1
+                    }
+                }, true)
+
+                Composite.add(engine.world, [body, Constraint.create({bodyA:body, pointB:{x:document.body.clientWidth/3+document.body.clientWidth/4*(i), y:0}, length:document.body.clientHeight/2, stiffness:0.002, damping:0.02})]);
+            });
+        });
+    }
+    
+    Composite.add(engine.world, [ground, circle, mConstraint, circleConstraint]);
+
+    // run the renderer
+    Render.run(render);
+
+    // create runner
+    var runner = Runner.create();
+
+    // run the engine
+    Runner.run(runner, engine);
+
+    setInterval(function() {
+        var circ = Bodies.circle(Math.random()*document.body.clientWidth, 0, Math.random()*15+5,  {render:{
+         fillStyle: Common.choose(['#f19648', '#f5d259', '#f55a3c', '#063e7b', '#ececd1']),
+         strokeStyle: Common.choose(['#f19648', '#f5d259', '#f55a3c', '#063e7b', '#ececd1']),
+         lineWidth: 0
+    }});
+        Body.setDensity(circ, 0.1);
+        Composite.add(engine.world, circ)
+    }, 500);
+</script>

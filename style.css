@@ -1,0 +1,157 @@
+#title{
+  width:100vw;
+  height:50vh;
+}
+
+body{
+  margin:0;
+  background-color: #E0E2DB;
+  overflow-x: hidden;
+}
+
+.title-div{
+  height:81vh;
+  width:100vw;
+}
+
+.title{
+  font-family: 'Archivo', sans-serif;
+  font-size: 10vw;
+  color: #191716;
+  background-color: #3D348B;
+  text-align: center;
+  padding:0;
+  margin:0;
+}
+
+h1{
+  padding: 0;
+  margin:0;
+}
+
+h2{
+  padding: 0;
+  margin:0;
+  font-size: xx-large;
+  font-family: 'Archivo', sans-serif;
+  color: #191716;
+  background-color: #3D348B;
+  text-align: center;
+}
+
+.subtitle{
+  font-family: 'Archivo', sans-serif;
+  font-size: x-large;
+  color: #191716;
+  background-color: #3D348B;
+  text-align: center;
+}
+
+.center{
+  gap:1em;
+  display:grid;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+
+}
+
+.column{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height:100%;
+}
+
+.section-heading{
+  font-family: 'Archivo', sans-serif;
+  font-size: 10vh;
+  color: #191716;
+  background-color: #E0E2DB;
+  text-align: center;
+  padding:0.5em;
+  /* margin-left: 0.5em;
+  margin-right:0.5em;
+  margin-bottom: 0.5em;
+  margin-top:0; */
+}
+
+.websites{
+  background-color: #3D348B;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  padding-left: 10em;
+  padding-right: 10em;
+  padding-bottom: 0;
+}
+
+p{
+  color:#E0E2DB;
+  font-size: xx-large;
+  font-family: 'Archivo', sans-serif;
+  width:20ch;
+}
+
+img{
+  width:25em;
+}
+
+#wave{
+  width:100vw;
+  position:relative;
+  top:-5px;
+}
+
+.translate{
+  background-color: #E6AF2E;
+  color:#ead7ad;
+  padding-bottom:3em;
+}
+
+.visualise{
+  height:100vw;
+  background-color: #191716;
+  color:#4f4845;
+}
+
+#translate{
+  background-color: #00000000;
+}
+
+label{
+  position:relative;
+  font-family: 'Archivo', sans-serif;
+  font-size: 2em;
+  color: #191716;
+  text-align: center;
+  padding:1em;
+}
+
+.row{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+#translate-text{
+  color:#191716;
+  width:100vw;
+  text-align: center;
+  margin:0;
+}
+
+#communicate{
+  color:#000000;
+  background-color: #3D348B;
+}
+
+.communicate{
+  color:#E0E2DB;
+}
