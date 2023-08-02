@@ -1,0 +1,30 @@
+body{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(640px, 1fr));
+    color:#E0E2DB;
+}
+
+img{
+    border-color: #3D348B;
+    border-width: 5px;
+    border-style: solid;
+    transition-duration: 200ms;
+}
+
+img:hover{
+    border-width: 10px;
+}
+
+label{
+    font-family: "Archivo", sans-serif;
+    width:30ch;
+    font-size: xx-large;
+    text-align: center;
+    color:#191716;
+}
+
+div{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+}
