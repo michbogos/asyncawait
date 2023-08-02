@@ -2,3 +2,9 @@
 
 ## Todo:
 - make responsive for mobile devices
+
+``` sh
+
+rsync -rtvzP ./asyncawait/ root@asyncawait.xyz:/var/www/asyncawait --exclude 'chromedriver'
+
+```
