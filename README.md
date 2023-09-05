@@ -5,6 +5,6 @@
 
 ``` sh
 
-rsync -rtvzP ./asyncawait/ root@asyncawait.xyz:/var/www/asyncawait --exclude 'chromedriver'
+rsync -rtvzP ./asyncawait/ root@asyncawait.xyz:/var/www/asyncawait --exclude 'node_modules'
 
 ```

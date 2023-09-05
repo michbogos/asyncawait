@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 import bs4
+import chardet
 
 start_time = time.time()
 
@@ -27,17 +28,23 @@ body = bs.find("body")
 directory = 'pages'
 for root, dirnames, filenames in os.walk(directory):
     for filename in filenames:
-        if filename.endswith('.html') or filename.find("page_grid.html"):
+        if filename.endswith('.html'):
             fname = os.path.join(root, filename)
-            with open(fname, "r") as htmlfile:
-                metabs = bs4.BeautifulSoup(htmlfile.read())
-                title = metabs.find("card-label").string
-                if title == '':
-                    print(f"Not found :{fname}")
             print('Filename: {}'.format(fname))
             url = f"http://127.0.0.1:5500/{fname}"
             print(url)
             driver.get(url)
+            with open(fname, "r") as htmlfile:
+                metabs = bs4.BeautifulSoup(htmlfile.read())
+                try:
+                    title = metabs.find("card-label").string
+                except:
+                    try:
+                        title = metabs.find("title").string
+                    except:
+                        title = driver.title
+                if title == '':
+                    print(f"Not found :{fname}")
             Image.open(BytesIO(base64.b64decode(driver.get_screenshot_as_base64()))).resize((640, 360), Image.LANCZOS).save(f'./assets/page_preview/{filename.replace(".html", ".webp")}', "webp", optimize=True, quality=95)
 
             link = bs.new_tag("a", href=f"./{fname}")
