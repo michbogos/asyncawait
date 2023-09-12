@@ -6,6 +6,8 @@ from io import BytesIO
 import base64
 import bs4
 import chardet
+from tqdm import tqdm
+import uuid
 
 start_time = time.time()
 
@@ -26,37 +28,50 @@ bs = bs4.BeautifulSoup(html)
 body = bs.find("body")
 
 directory = 'pages'
+
+image_ids = []
+
+ttl = 0
+
 for root, dirnames, filenames in os.walk(directory):
     for filename in filenames:
-        if filename.endswith('.html'):
-            fname = os.path.join(root, filename)
-            print('Filename: {}'.format(fname))
-            url = f"http://127.0.0.1:5500/{fname}"
-            print(url)
-            driver.get(url)
-            with open(fname, "r") as htmlfile:
-                metabs = bs4.BeautifulSoup(htmlfile.read())
-                try:
-                    title = metabs.find("card-label").string
-                except:
+        if filename.endswith(".html"):
+            ttl += 1
+
+with tqdm(total=ttl) as progress:
+    for root, dirnames, filenames in os.walk(directory):
+        for filename in filenames:
+            if filename.endswith('.html'):
+                fname = os.path.join(root, filename)
+                print('Filename: {}'.format(fname))
+                url = f"http://127.0.0.1:5500/{fname}"
+                print(url)
+                driver.get(url)
+                with open(fname, "r") as htmlfile:
+                    metabs = bs4.BeautifulSoup(htmlfile.read(), features="lxml")
                     try:
-                        title = metabs.find("title").string
+                        title = metabs.find("card-label").string
                     except:
-                        title = driver.title
-                if title == '':
-                    print(f"Not found :{fname}")
-            Image.open(BytesIO(base64.b64decode(driver.get_screenshot_as_base64()))).resize((640, 360), Image.LANCZOS).save(f'./assets/page_preview/{filename.replace(".html", ".webp")}', "webp", optimize=True, quality=95)
+                        try:
+                            title = metabs.find("title").string
+                        except:
+                            title = driver.title
+                    if title == '':
+                        print(f"Not found :{fname}")
+                
+                image_ids.append(str(uuid.uuid4()))
+                Image.open(BytesIO(base64.b64decode(driver.get_screenshot_as_base64()))).resize((640, 360), Image.LANCZOS).save(f'./assets/page_preview/{image_ids[-1]}.webp', "webp", optimize=True, quality=95)
 
-            link = bs.new_tag("a", href=f"./{fname}")
-            link.append(bs.new_tag("img", src=f'./assets/page_preview/{filename.replace(".html", ".webp")}', loading="lazy"))
+                link = bs.new_tag("a", href=f"./{fname}")
+                link.append(bs.new_tag("img", src=f'./assets/page_preview/{image_ids[-1]}.webp', loading="lazy"))
 
-            div = bs.new_tag("div")
-            div.append(link)
-            label = bs.new_tag("label")
-            label.string = title
-            div.append(label)
-
-            body.append(div)
+                div = bs.new_tag("div")
+                div.append(link)
+                label = bs.new_tag("label")
+                label.string = title
+                div.append(label)
+                body.append(div)
+                progress.update(1)
 
 with open("page_grid.html", "w") as f:
     f.write(str(bs))
