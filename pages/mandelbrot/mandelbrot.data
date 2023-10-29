@@ -1,0 +1,29 @@
+#version 100
+
+precision highp float;
+
+#define product(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
+
+// Input vertex attributes (from vertex shader)
+varying vec2 fragTexCoord;
+varying vec4 fragColor;
+
+uniform vec2 topLeft;
+uniform float scale;
+uniform vec2 resolution;
+// Output fragment color
+
+void main(){
+    vec2 uv = ((-resolution.xy + 2.0*(gl_FragCoord.xy))/resolution.y).xy;
+    vec2 z = topLeft+uv*scale;
+    vec2 c = z;
+    float iteration = 0.0;
+    for(int i = 0; i  < 500; i++){
+        z = product(z, z) + c;
+        iteration = float(i);
+        if(length(z)>2.0){
+            break;
+        }
+    }
+    gl_FragColor = length(z)<2.0 ? vec4(0, 0, 0, 1) :vec4(0.7, 0.3, 0.9, 1)*(pow(pow(iteration/500.0, 0.1), 0.5));
+}
