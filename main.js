@@ -60,3 +60,8 @@ window.onload = function() {
     css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
     document.body.appendChild(css);
 };
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("/serviceworker.js");
+ }
+ 

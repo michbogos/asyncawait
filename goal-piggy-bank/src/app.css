@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+progress {
+  @apply rounded-lg;
+  @apply bg-white;
+}
+progress::-webkit-progress-bar {
+  @apply bg-gradient-to-r;
+  @apply from-orange-500;
+  @apply to-orange-200;
+}
+progress::-webkit-progress-value {
+  @apply bg-gradient-to-r;
+  @apply from-orange-500;
+  @apply to-orange-200;
+}
+progress::-moz-progress-bar {
+  @apply bg-gradient-to-r;
+  @apply from-orange-500;
+  @apply to-orange-200;
+}

@@ -47,6 +47,7 @@ with tqdm(total=ttl) as progress:
                 url = f"http://127.0.0.1:5500/{fname}"
                 print(url)
                 driver.get(url)
+                time.sleep(10)
                 with open(fname, "r") as htmlfile:
                     metabs = bs4.BeautifulSoup(htmlfile.read(), features="lxml")
                     try:
